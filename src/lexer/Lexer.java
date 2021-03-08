@@ -54,8 +54,57 @@ public class Lexer {
             words.put(s, w);
             return w;
         }
+
+        /* Para extender los operadores relacionales  <, <=, ==, !=, >=, >           */
+        String op = "";
+        int opId = 0;
+        if (isSymbol(peek)){
+            int counter = 0;
+            do{
+                op += String.valueOf(peek);
+                peek = (char) System.in.read();
+                counter++;
+            }while(counter < 2 && isSymbol(peek));
+            switch (op) {
+                case "<":
+                    opId = Tag.LT;
+                    break;
+                case "<=":
+                    opId = Tag.LE;
+                    break;
+                case "==":
+                    opId = Tag.EQ;
+                    break;
+                case "!=":
+                    opId = Tag.NE;
+                    break;
+                case ">=":
+                    opId = Tag.GE;
+                    break;
+                case ">":
+                    opId = Tag.GT;
+                    break;
+                default:
+            }
+            return new RelationalOP(opId ,op);
+        }
+
         Token t = new Token(peek);
         peek = ' ';
         return t;
     }
+
+    public boolean isSymbol(char c){
+        if(c == '<' || c == '=' || c == '!' || c == '>'){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }
+
+/*
+[DONE] Extienda el analizador léxico para que reconozca los operadores relacionales <, <=, ==, !=, >=, >
+Extienda el analizador para que reconozca números en punto flotante 2., 3.14, .5
+*/
