@@ -19,16 +19,49 @@ public class Lexer {
     }
 
     public Token scan() throws IOException {
+
         /* salta espacios en blanco */
         for (;; peek = (char) System.in.read()) {
-            if (peek == ' ' || peek == '\t')
+            if (peek == ' ' || peek == '\t') {
                 continue;
+            }
             else if (peek == '\n')
                 line = line + 1;
             else
                 break;
         }
 
+        //Ignorar comentarios
+        if (Character.hashCode(peek) == 47) {
+            boolean flag = true;
+            do {
+                peek = (char) System.in.read();
+                if(Character.hashCode(peek) == 47) {
+                    boolean flag0 = true;
+                    do {
+                        peek = (char) System.in.read();
+                        if(Character.hashCode(peek) == 10) {
+                            peek = (char) System.in.read();
+                            flag0=false;
+                            flag=false;
+                        }
+                    } while (flag0);
+                } else if (Character.hashCode(peek) == 42) {
+                    boolean flag1 = true;
+                    do {
+                        peek = (char) System.in.read();
+                        if(Character.hashCode(peek) == 42) {
+                            peek = (char) System.in.read();
+                            if(Character.hashCode(peek) == 47) {
+                                peek = (char) System.in.read();
+                                flag = false;
+                                flag1 = false;
+                            }
+                        }
+                    } while (flag1);
+                }
+            } while (flag);
+        }
         /* Para generar un entero */
         if (Character.isDigit(peek)) {
             int v = 0;
@@ -38,6 +71,9 @@ public class Lexer {
             } while (Character.isDigit(peek));
             return new Num(v);
         }
+
+
+        /* Para generar comentario en línea, el de bloque por separado */
 
         /* Para generar un identificador */
         if (Character.isLetter(peek)) {
