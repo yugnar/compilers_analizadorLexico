@@ -69,9 +69,21 @@ public class Lexer {
                 v = 10 * v + Character.digit(peek, 10);
                 peek = (char) System.in.read();
             } while (Character.isDigit(peek));
+
+            if(peek == '.'){
+                peek = (char) System.in.read();
+                if(Character.isDigit(peek)){
+                    int v2 = 0;
+                    do {
+                        v2 = 10 * v2 + Character.digit(peek, 10);
+                        peek = (char) System.in.read();
+                    } while (Character.isDigit(peek));
+                    String vTemp = Integer.toString(v) + "." + Integer.toString(v2);
+                    return new DecimalNum(Double.parseDouble(vTemp));
+                }
+            }
             return new Num(v);
         }
-
 
         /* Para generar comentario en línea, el de bloque por separado */
 
@@ -139,8 +151,3 @@ public class Lexer {
         }
     }
 }
-
-/*
-[DONE] Extienda el analizador léxico para que reconozca los operadores relacionales <, <=, ==, !=, >=, >
-Extienda el analizador para que reconozca números en punto flotante 2., 3.14, .5
-*/
